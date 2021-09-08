@@ -1,5 +1,5 @@
 from qiskit import *
-from operations import add, sub
+from operations import add, sub, multiplication, power
 from utils import bcolors
 import math
 
@@ -55,23 +55,38 @@ if __name__ == "__main__":
 
     first = '{0:{fill}3b}'.format(input1, fill='0')
     second = '{0:{fill}3b}'.format(input2, fill='0')
-
-    print()
-    print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)
-    print(bcolors.BOLD + bcolors.OKCYAN + 'You want to perform the following operation:'+ bcolors.ENDC)
-    print(bcolors.BOLD + bcolors.OKCYAN + f'{input1} {operator} {input2} --> {first} {operator} {second} = ...' + bcolors.ENDC)
-    
+    # for multiplication
+    firstDec = input1
+    secondDec = input2
 
     l1 = len(first)
     l2 = len(second)
 
     # Making sure that 'first' and 'second' are of the same length 
     # by padding the smaller string with zeros
-    if l2>l1:
-        first,second = second, first
-        l2, l1 = l1, l2
-    second = ("0")*(l1-l2) + second
-    n = l1
+
+    if operator == '+' or operator == '-':
+        if l2>l1:
+            first,second = second, first
+            l2, l1 = l1, l2
+        second = ("0")*(l1-l2) + second
+        n = l1
+
+    elif operator == '*':
+        # Padding 'first' the same lenght of 'result'
+        # since result can have at max len(first) + len(second) bits when multiplying
+        first = ("0")*(l2) + first
+        n = l1+l2
+
+    # TO BE CHECK!!
+    elif operator == '**':
+        first = ("0")*(l2) + first
+        n = l1 + l1*l2
+
+    print()
+    print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)
+    print(bcolors.BOLD + bcolors.OKCYAN + 'You want to perform the following operation:'+ bcolors.ENDC)
+    print(bcolors.BOLD + bcolors.OKCYAN + f'{input1} {operator} {input2} --> {first} {operator} {second} = ...' + bcolors.ENDC)
 
     # create the register based on the operation choosen
     pie = math.pi
@@ -81,10 +96,16 @@ if __name__ == "__main__":
     qc = QuantumCircuit(a, b, cl, name="qc")
 
     if operator == '+':
-        add.add(first,second,l1,a,b,cl,qc)
+        add.add(first,second,n,a,b,cl,qc)
     elif operator == '-':
-        sub.subtract(first,second,l1,a,b,cl,qc)
+        sub.subtract(first,second,n,a,b,cl,qc)
+    elif operator == '*':
+        multiplication.multiply(first,secondDec,n,a,b,cl,qc)
+    elif operator == '**':
+        power.pow(first,firstDec,secondDec,n,a,b,cl,qc)
+    #else:
+        #division.divide()
 
     print(bcolors.BOLD + bcolors.OKCYAN + 'Drawing the circuit...' + bcolors.ENDC)
-    print(qc)
+    #print(qc)
     print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)
