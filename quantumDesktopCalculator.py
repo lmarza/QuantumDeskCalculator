@@ -5,7 +5,7 @@ import math
 
 def selectOperator():
     valid_operators = ["+", "-", "*", "/", "**"]
-    operator = input(bcolors.WARNING + "\nSelect one operator[+ addition, - subtraction, * multiplication, / division, ** power]:  " + bcolors.ENDC)
+    operator = input(bcolors.WARNING + "\nSelect one operator [+ addition, - subtraction, * multiplication, / division, ** power]:  " + bcolors.ENDC)
     
     # Check valid operator
     if not(operator in valid_operators):

@@ -46,15 +46,17 @@ def add(first, second, n, a, b, cl, qc):
         qc.measure(a[i], cl[i])
     
     # Execute using the local simulator
-    '''
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to local simulator...' + bcolors.ENDC)
     # Set chosen backend and execute job
     num_shots = 100 #Setting the number of times to repeat measurement
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connect!' + bcolors.ENDC)
+    print(bcolors.BOLD + bcolors.OKCYAN + f'Running the experiment on {num_shots} shots...' + bcolors.ENDC)
     job = execute(qc, backend=Aer.get_backend('qasm_simulator'), shots=num_shots)
     # Get results of program
     job_stats = job.result().get_counts()
-    print(job_stats)
+    print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} + {second} is {job_stats}' + bcolors.ENDC)
+    
     '''
-
     # Execute using the IBM remote simulator
     print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to IBM remote simulator...' + bcolors.ENDC)
     IBMQ.load_account()
@@ -64,3 +66,4 @@ def add(first, second, n, a, b, cl, qc):
     print(bcolors.BOLD + bcolors.OKCYAN + f'Running the experiment...' + bcolors.ENDC)
     counts = execute(qc, backend, shots=100).result().get_counts()
     print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} + {second} is {counts}' + bcolors.ENDC)
+    '''
