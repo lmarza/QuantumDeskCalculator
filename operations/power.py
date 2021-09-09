@@ -1,6 +1,7 @@
 import math
 from qiskit import *
-from utils import bcolors, createInputState, evolveQFTStateSum, inverseQFT
+from utils import bcolors, createInputState, inverseQFT
+from multiplication import evolveState
 
 pie = math.pi
 def pow(first, firstDec, second, n, a, result, cl, qc):
@@ -10,11 +11,6 @@ def pow(first, firstDec, second, n, a, result, cl, qc):
             qc.x(a[n-(i+1)])
 
     if second != 0:
-        # do the same for the 'result' register
-        for i in range(n):
-            if first[i] == "1":
-                qc.x(result[n-(i+1)])
-                
         # Compute the Fourier transform of register 'result'
         for i in range(n+1):
             createInputState(qc, result, n-i, pie)
@@ -24,9 +20,7 @@ def pow(first, firstDec, second, n, a, result, cl, qc):
         # doing incremental sums
         s = second
         for _ in range(s):
-            for j in range(firstDec-1): #range from 0 to second NOT INCLUDED since 'result' already has one 'a' value at the beginning
-                for i in range(n+1):
-                    evolveQFTStateSum(qc, result, a, n-i, pie)
+            evolveState(second,)
 
         # Compute the inverse Fourier transform of register a
         for i in range(n+1):
@@ -35,6 +29,9 @@ def pow(first, firstDec, second, n, a, result, cl, qc):
         # Measure qubits
         for i in range(n+1):
             qc.measure(result[i], cl[i])
+            
+    else:
+        qc.x(result[n-1])
     
     # Execute using the IBM remote simulator
     print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to IBM remote simulator...' + bcolors.ENDC)

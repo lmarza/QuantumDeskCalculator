@@ -41,27 +41,3 @@ def subtract(first, second, n, a, b, cl, qc):
     # Compute the inverse Fourier transform of register a
     for i in range(n+1):
         inverseQFT(qc, a, i, pie)
-        
-    # Measure qubits
-    for i in range(n+1):
-        qc.measure(a[i], cl[i])
-    
-    # Execute using the local simulator
-    '''
-    # Set chosen backend and execute job
-    num_shots = 100 #Setting the number of times to repeat measurement
-    job = execute(qc, backend=Aer.get_backend('qasm_simulator'), shots=num_shots)
-    # Get results of program
-    job_stats = job.result().get_counts()
-    print(job_stats)
-    '''
-    
-    # Execute using the IBM remote simulator
-    print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to IBM remote simulator...' + bcolors.ENDC)
-    IBMQ.load_account()
-    print(bcolors.BOLD + bcolors.OKCYAN + 'Connect!' + bcolors.ENDC)
-    provider = IBMQ.get_provider()
-    backend = provider.get_backend('ibmq_qasm_simulator')
-    print(bcolors.BOLD + bcolors.OKCYAN + f'Running the experiment...' + bcolors.ENDC)
-    counts = execute(qc, backend, shots=100).result().get_counts()
-    print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} - {second} is {counts}' + bcolors.ENDC)

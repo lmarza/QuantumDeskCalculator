@@ -24,6 +24,35 @@ def checkOperation(input1, input2, operator):
         print(bcolors.FAIL + f"Invalid operation, division by 0 is not allowed" + bcolors.ENDC)
         quit()
 
+def printResult(first, second, qc,result, cl, n, operator):
+
+    # Measure qubits
+    for i in range(n+1):
+        qc.measure(result[i], cl[i])
+
+    # Execute using the local simulator
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to local simulator...' + bcolors.ENDC)
+    # Set chosen backend and execute job
+    num_shots = 100 #Setting the number of times to repeat measurement
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connect!' + bcolors.ENDC)
+    print(bcolors.BOLD + bcolors.OKCYAN + f'Running the experiment on {num_shots} shots...' + bcolors.ENDC)
+    job = execute(qc, backend=Aer.get_backend('qasm_simulator'), shots=num_shots)
+    # Get results of program
+    job_stats = job.result().get_counts()
+    print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} {operator} {second} is {job_stats}' + bcolors.ENDC)
+   
+    '''
+    # Execute using the IBM remote simulator
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connecting to IBM remote simulator...' + bcolors.ENDC)
+    IBMQ.load_account()
+    print(bcolors.BOLD + bcolors.OKCYAN + 'Connect!' + bcolors.ENDC)
+    provider = IBMQ.get_provider()
+    backend = provider.get_backend('ibmq_qasm_simulator')
+    print(bcolors.BOLD + bcolors.OKCYAN + f'Running the experiment...' + bcolors.ENDC)
+    counts = execute(qc, backend, shots=100).result().get_counts()
+    second = '{0:{fill}3b}'.format(second, fill='0')
+    print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} * {second} is {counts}' + bcolors.ENDC)
+    '''
 
 
 if __name__ == "__main__":
@@ -78,10 +107,6 @@ if __name__ == "__main__":
         first = ("0")*(l2) + first
         n = l1+l2
 
-    # TO BE CHECK!!
-    elif operator == '**':
-        first = ("0")*(l2) + first
-        n = l1 + l1*l2
 
     print()
     print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)
@@ -97,15 +122,16 @@ if __name__ == "__main__":
 
     if operator == '+':
         add.add(first,second,n,a,b,cl,qc)
+        printResult(first, second, qc,a, cl, n, operator)
     elif operator == '-':
         sub.subtract(first,second,n,a,b,cl,qc)
+        printResult(first, second, qc,a, cl, n, operator)
     elif operator == '*':
         multiplication.multiply(first,secondDec,n,a,b,cl,qc)
+        printResult(first, second, qc, b, cl, n,operator)
     elif operator == '**':
         power.pow(first,firstDec,secondDec,n,a,b,cl,qc)
     #else:
         #division.divide()
 
-    print(bcolors.BOLD + bcolors.OKCYAN + 'Drawing the circuit...' + bcolors.ENDC)
-    #print(qc)
     print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)
