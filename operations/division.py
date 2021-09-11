@@ -27,7 +27,7 @@ def div(dividend, divisor, accumulator,c_dividend, circ, cl_index):
                          shots=10).result()
  
         counts = result.get_counts("qc")
-        print(counts)
+        #print(counts)
         c_dividend_str = list(counts.keys())[0].split()[cl_index]
 
     subtraction.sub(accumulator, d, circ)
