@@ -6,7 +6,7 @@ import math
 
 if __name__ == "__main__":
     print(bcolors.OKGREEN + '##########################################' + bcolors.ENDC)
-    print(bcolors.OKGREEN + '####### Quantum Desktop Calculator #######' + bcolors.ENDC)
+    print(bcolors.OKGREEN + '#######  Quantum Desk Calculator  ########' + bcolors.ENDC)
     print(bcolors.OKGREEN + '##########################################'+ bcolors.ENDC)
 
     # take the operator and check
