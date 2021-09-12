@@ -1,6 +1,6 @@
 from qiskit import *
 from operations import addition, subtraction, multiplication, division
-from utils import bcolors, selectOperator, checkOperation, printResult
+from utils import bcolors, selectOperator, checkOperation, printResult, initQubits
 import math
 
 
@@ -64,22 +64,19 @@ if __name__ == "__main__":
 
 
     # create the register based on the operation choosen
-    if operator == '+' or operator == '-' or operator == '*':
-        a = QuantumRegister(n+1, "a") 
-        b = QuantumRegister(n+1, "b")     
-        cl = ClassicalRegister(n+1, "cl") 
+    a = QuantumRegister(n+1, "a") 
+    b = QuantumRegister(n+1, "b")
+    accumulator = QuantumRegister(n+1, "accumulator")     
+    cl = ClassicalRegister(n+1, "cl")
+
+
+    if operator == '+' or operator == '-' or operator == '*':     
         qc = QuantumCircuit(a, b, cl, name="qc")
-
         # Flip the corresponding qubit in register a if a bit in the string first is a 1
-        for i in range(n):
-            if first[i] == "1":
-                qc.x(a[n-(i+1)])
-
+        initQubits(first, qc, a, n)
+        # Flip the corresponding qubit in register b if b bit in the string second is a 1
         if operator != '*':
-            # Flip the corresponding qubit in register b if a bit in the string second is a 1
-            for i in range(n):
-                if second[i] == "1":
-                    qc.x(b[n-(i+1)])
+            initQubits(second, qc, b, n)
 
         if operator == '+':
             addition.add(a,b,qc)
@@ -93,27 +90,12 @@ if __name__ == "__main__":
             printResult(first, second, qc, b, cl, n,operator)
 
     elif operator == '/':
-        n = l1
-        dividend = QuantumRegister(n+1, "dividend") 
-        divisor = QuantumRegister(n+1, "divisor")
-        accumulator = QuantumRegister(n+1, "accumulator")
-        c_dividend = ClassicalRegister(n+1, "c_dividend") 
-        circ = QuantumCircuit(dividend, divisor, accumulator, c_dividend, name="qc")
-
-        # Flip the corresponding qubit in register a if a bit in the string first is a 1
-        for i in range(n):
-            if first[i] == "1":
-                circ.x(dividend[n-(i+1)])
-
-        # Flip the corresponding qubit in register b if a bit in the string second is a 1
-        for i in range(n):
-            if second[i] == "1":
-                circ.x(divisor[n-(i+1)])
-
-    
-        division.div(dividend, divisor, accumulator,c_dividend, circ, 0)
-        printResult(first, second, circ, accumulator, c_dividend, n,operator)
-
-
+        qc = QuantumCircuit(a, b, accumulator, cl, name="qc")
+        # Flip the corresponding qubit in register a and b if a,b bit in the string first,second is a 1
+        initQubits(first, qc, a, n)
+        initQubits(second, qc, b, n)
+        
+        division.div(a, b, accumulator, cl, qc, 0)
+        printResult(first, second, qc, accumulator, cl, n, operator)
 
     print(bcolors.OKCYAN + '#'*150 + bcolors.ENDC)

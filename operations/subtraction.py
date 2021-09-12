@@ -12,7 +12,7 @@ def sub(a, b, qc):
     for i in range(0, n):
         createInputState(qc, a, n-(i+1), pie)
     #Add the two numbers by evolving the Fourier transform F(ψ(reg_a))>
-    #to |F(ψ(reg_a+reg_b))>
+    #to |F(ψ(reg_a-reg_b))>
     for i in range(0, n):
         evolveQFTStateSub(qc, a, b, n-(i+1), pie) 
     #Compute the inverse Fourier transform of register a

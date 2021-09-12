@@ -8,8 +8,6 @@ pie = math.pi
 
 
 def div(dividend, divisor, accumulator,c_dividend, circ, cl_index):
-    
-
     d = QuantumRegister(1)
     circ.add_register(d)
     circ.x(d[0])
@@ -27,7 +25,8 @@ def div(dividend, divisor, accumulator,c_dividend, circ, cl_index):
                          shots=10).result()
  
         counts = result.get_counts("qc")
-        #print(counts)
-        c_dividend_str = list(counts.keys())[0].split()[cl_index]
+        print(counts)
+        c_dividend_str = list(counts.keys())[0] #.split()[0]
+     
 
     subtraction.sub(accumulator, d, circ)

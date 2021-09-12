@@ -96,4 +96,16 @@ def printResult(first, second, qc,result, cl, n, operator):
     job = execute(qc, backend=Aer.get_backend('qasm_simulator'), shots=num_shots)
     # Get results of program
     job_stats = job.result().get_counts()
-    print(bcolors.BOLD + bcolors.OKGREEN + f'The result of the operation {first} {operator} {second} is {job_stats}' + bcolors.ENDC)
+    for key, value in job_stats.items():
+        res = key
+        prob = value
+    print(bcolors.BOLD + bcolors.OKGREEN + f'\n{first} {operator} {second} = {res} with a probability of {prob}%' + bcolors.ENDC)
+
+
+
+def initQubits(str, qc, reg, n):
+
+    # Flip the corresponding qubit in register if a bit in the string is a 1
+    for i in range(n):
+        if str[i] == "1":
+            qc.x(reg[n-(i+1)])
