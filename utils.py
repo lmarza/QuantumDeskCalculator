@@ -61,8 +61,8 @@ def inverseQFT(qc, reg, n, pie):
 
 
 def selectOperator():
-    valid_operators = ["+", "-", "*", "/", "**"]
-    operator = input(bcolors.WARNING + "\nSelect one operator [+ addition, - subtraction, * multiplication, / division, ** power]:  " + bcolors.ENDC)
+    valid_operators = ["+", "-", "*", "/"]
+    operator = input(bcolors.WARNING + "\nSelect one operator [+ addition, - subtraction, * multiplication, / division]:  " + bcolors.ENDC)
     
     # Check valid operator
     if not(operator in valid_operators):
