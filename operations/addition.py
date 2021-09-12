@@ -1,15 +1,14 @@
 import math
 from qiskit import *
-from utils import bcolors, createInputState, evolveQFTStateSum, inverseQFT
+from utils import bcolors, executeQFT, evolveQFTStateSum, inverseQFT
 
 pie = math.pi
 
-def add(a, b, qc):
-    
+def sum(a, b, qc):    
     n = len(a)-1
     # Compute the Fourier transform of register a
     for i in range(n+1):
-        createInputState(qc, a, n-i, pie)
+        executeQFT(qc, a, n-i, pie)
         
     # Add the two numbers by evolving the Fourier transform F(ψ(reg_a))>
     # to |F(ψ(reg_a+reg_b))>
